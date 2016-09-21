@@ -1,4 +1,4 @@
-package org.webonise.dining_philosophers;
+package org.webonise.diningphilosophers;
 
 public class Fork {
     //sometime thread behave abnormally and resume itself from waiting state

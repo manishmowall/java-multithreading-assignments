@@ -1,48 +1,85 @@
-package org.webonise.dining_philosophers;
+package org.webonise.diningphilosophers;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Philosopher implements Runnable {
+   private static final int maxPauseTime = 3000;
+   private static final int minPauseTime = 1000;
    private final Fork left;
    private final Fork right;
-   private final String id;
-   private final Thread thread;
+   private final int id;
+   private boolean runStatus;
 
    public Philosopher(Fork left, Fork right, int id) {
 
       this.left = left;
       this.right = right;
-      this.id = "" + id;
-      thread = new Thread(this, this.id);
-      thread.start();
+      this.id = id;
+      runStatus = true;
    }
 
    public void run() {
 
       try {
-         //to take thread out of loop and stop
-         int i = 0;
-         while (i < 5) {
-            System.out.println("Philosopher " + id + " " + "thinking");
-            pause();
-            System.out.println("Philosopher " + id + " " + "grabbing right");
-            right.take();
-            System.out.println("Philosopher " + id + " " + "grabbing left");
-            left.take();
-            System.out.println("Philosopher " + id + " " + "eating");
-            pause();
-            right.drop();
-            left.drop();
-            i++;
+         while (runStatus) {
+            thinking();
+            grabLeftFork();
+            grabRightFork();
+            eating();
+            dropForks();
          }
-      } catch (InterruptedException ex) {
-         System.out.println(ex.getStackTrace());
+      } catch (InterruptedException interruptedexception) {
+         System.out.println(interruptedexception.getStackTrace());
       }
+   }
+
+   public void stopPhilosopher() {
+
+      runStatus = false;
+   }
+
+   private void thinking() throws InterruptedException {
+
+      System.out.println("Philosopher " + id + " " + "thinking");
+      pause();
+   }
+
+   private void eating() throws InterruptedException {
+
+      System.out.println("Philosopher " + id + " " + "eating");
+      pause();
    }
 
    //pause for thinking or eating purpose
    private void pause() throws InterruptedException {
 
-      TimeUnit.MILLISECONDS.sleep(1000);
+      TimeUnit.MILLISECONDS.sleep(getRandomPauseTime(maxPauseTime, minPauseTime));
+   }
+
+   //for getting random sleep time(ms) for pause() method between maxTime and minTime
+   private int getRandomPauseTime(int maxTime, int minTime) {
+
+      Random random = new Random();
+      return random.nextInt((maxTime - minTime) + 1) + minTime;
+   }
+
+   private void grabLeftFork() throws InterruptedException {
+
+      System.out.println("Philosopher " + id + " " + "grabbing right");
+      left.take();
+   }
+
+   private void grabRightFork() throws InterruptedException {
+
+      System.out.println("Philosopher " + id + " " + "grabbing left");
+      right.take();
+   }
+
+   private void dropForks() {
+
+      System.out.println("Philosopher " + id + " " + "drops both forks");
+      right.drop();
+      left.drop();
    }
 }
