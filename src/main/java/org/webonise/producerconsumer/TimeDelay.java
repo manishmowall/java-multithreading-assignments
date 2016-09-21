@@ -3,16 +3,22 @@ package org.webonise.producerconsumer;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class Delay {
-   public static void getRandomDelay(int maxPauseTime, int minPauseTime) throws InterruptedException {
+public class TimeDelay {
 
-      TimeUnit.MILLISECONDS.sleep(getRandomPauseTime(maxPauseTime, minPauseTime));
+   public static void getDeplay(int time) throws InterruptedException {
+
+      TimeUnit.MILLISECONDS.sleep(time);
    }
 
-   //for getting random sleep time(ms) for getRandomDelay() method between maxTime and minTime
-   private static int getRandomPauseTime(int maxTime, int minTime) {
+   public static void getRandomDelay(int maxPauseTimeInMilliSeconds, int minPauseTimeInMilliSeconds) throws InterruptedException {
+
+      TimeUnit.MILLISECONDS.sleep(getRandomPauseTime(maxPauseTimeInMilliSeconds, minPauseTimeInMilliSeconds));
+   }
+
+   //for getting random sleep time(ms) for getRandomDelay() method between maxTimeInMilliSeconds and minTimeInMilliSeconds
+   private static int getRandomPauseTime(int maxTimeInMilliSeconds, int minTimeInMilliSeconds) {
 
       Random random = new Random();
-      return random.nextInt((maxTime - minTime) + 1) + minTime;
+      return random.nextInt((maxTimeInMilliSeconds - minTimeInMilliSeconds) + 1) + minTimeInMilliSeconds;
    }
 }

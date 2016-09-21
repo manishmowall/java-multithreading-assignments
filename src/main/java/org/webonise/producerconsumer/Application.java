@@ -1,28 +1,41 @@
-package org.webonise.producer_consumer;
+package org.webonise.producerconsumer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //here we are having one producer and two consumers.
 public class Application {
+   private static final int DelayTimeInMilliSeconds = 15000;
+
    public static void main(String args[]) {
+
+      System.out.println("\n======Producer Consumer Problem======\n");
       //this is queue which is shared among the threads.
       List<Integer> sharedQueue = new ArrayList<>();
 
-      Thread producerThread = new Thread(new Producer(sharedQueue), "Producer");
-      Thread consumerThread1 = new Thread(new Consumer(sharedQueue), "Consumer1");
-      Thread consumerThread2 = new Thread(new Consumer(sharedQueue), "Consumer2");
+      Producer producer = new Producer(sharedQueue, "Producer");
+      Thread producerThread = new Thread(producer);
+
+      Consumer consumer1 = new Consumer(sharedQueue, "Consumer1");
+      Consumer consumer2 = new Consumer(sharedQueue, "Consumer2");
+      Thread consumerThread1 = new Thread(consumer1);
+      Thread consumerThread2 = new Thread(consumer2);
       producerThread.start();
       consumerThread1.start();
       consumerThread2.start();
 
-      System.out.println("Waiting for child threads to close");
       try {
+         TimeDelay.getDeplay(DelayTimeInMilliSeconds);
+         producer.stop();
          producerThread.join();
+
+         consumer1.stop();
          consumerThread1.join();
-         consumerThread1.join();
-      } catch (InterruptedException ex) {
-         System.out.println(ex.getStackTrace());
+
+         consumer2.stop();
+         consumerThread2.join();
+      } catch (InterruptedException interruptedException) {
+         interruptedException.printStackTrace();
       }
 
       System.out.println("Main thread exits");
