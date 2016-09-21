@@ -4,12 +4,11 @@ import java.util.List;
 
 class Producer implements Runnable {
    private final List<Integer> sharedQueue;
-   private final int size;
+   final int queueSize = 4;
 
-   public Producer(List<Integer> sharedQueue, int size) {
+   public Producer(List<Integer> sharedQueue) {
 
       this.sharedQueue = sharedQueue;
-      this.size = size;
    }
 
    @Override
@@ -29,9 +28,9 @@ class Producer implements Runnable {
    // And if not adding the element and notify the threads.
    private void produce(int element) throws InterruptedException {
       //wait if queue is full
-      while (sharedQueue.size() == size) {
+      while (sharedQueue.size() == queueSize) {
          synchronized (sharedQueue) {
-            System.out.println("Queue is full, " + Thread.currentThread().getName() + " is waiting, size : " + sharedQueue.size());
+            System.out.println("Queue is full, " + Thread.currentThread().getName() + " is waiting, queue size : " + sharedQueue.size());
             sharedQueue.wait();
          }
       }

@@ -28,14 +28,14 @@ class Consumer implements Runnable {
       while (sharedQueue.isEmpty()) {
          synchronized (sharedQueue) {
             System.out.println("Queue is empty, " + Thread.currentThread().getName() + " is waiting , size: " + sharedQueue.size());
-            sharedQueue.wait(3000);
+            sharedQueue.wait();
          }
       }
 
       //Otherwise consume element and notify waiting producer
       synchronized (sharedQueue) {
-         sharedQueue.notify();
          System.out.println(sharedQueue.remove(0) + " element is consumed by " + Thread.currentThread().getName());
+         sharedQueue.notify();
       }
    }
 }
