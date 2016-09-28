@@ -25,7 +25,7 @@ public class Application {
       consumerThread2.start();
 
       try {
-         TimeDelay.getDeplay(DelayTimeInMilliSeconds);
+         TimeDelay.getDelay(DelayTimeInMilliSeconds);
          producer.stop();
          producerThread.join();
 

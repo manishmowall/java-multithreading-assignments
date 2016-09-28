@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TimeDelay {
 
-   public static void getDeplay(int time) throws InterruptedException {
+   public static void getDelay(int time) throws InterruptedException {
 
       TimeUnit.MILLISECONDS.sleep(time);
    }
